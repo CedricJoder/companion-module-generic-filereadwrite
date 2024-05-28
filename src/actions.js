@@ -21,13 +21,33 @@ module.exports = {
 		};
 
 
-actions.appendFile = {
+		actions.appendFile = {
 			name: 'Append writebuffer to File ',
 			options: [],
 			callback: async function (action) {
-				self.appendFile();
+				self.appendFile(self.writebuffer);
 			}
 		};
+
+
+		actions.appendFileData = {
+			name: 'Append Specified Data to File ',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Data',
+					description: 'Data to write. Accepts variables',
+					id: 'data',
+					default: '',
+					useVariables: true
+				},
+			],
+			callback: async function (action) {
+				let data = await self.parseVariablesInString(action.options.data)
+				self.appendFile(data);
+			}
+		};
+
 
 
 		actions.setWritebuffer = {

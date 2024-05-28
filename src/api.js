@@ -86,15 +86,14 @@ module.exports = {
 
 	setWritebuffer(data) {
 		let self = this;
-  self.writebuffer = data;
- },
+		self.writebuffer = data;
+	},
 
-	appendFile() {
+	appendFile(data) {
 		let self = this;
 	
 		let path = self.config.path;
 		let encoding = self.config.encoding;
-		let writebuffer= self.writebuffer;
 	
 		try {
 			if (self.config.verbose) {
@@ -109,7 +108,7 @@ module.exports = {
 				}
 				else {
 					self.fd = fd;
-					fs.write(fd, writebuffer, null, encoding, (err, written, str) => {
+					fs.write(fd, data, null, encoding, (err, written, str) => {
 						if (err) {
 							self.updateStatus(InstanceStatus.BadConfig, 'Error Opening File');
 							self.log('error', 'Error writing file: ' + err);
@@ -121,7 +120,7 @@ module.exports = {
 						}
 					});
 					fs.close(fd);
-    self.readFile();
+					self.readFile();
 				}
 			});
 		}
@@ -151,6 +150,7 @@ module.exports = {
 			self.log('error', 'Error Reading custom file path: ' + error);
 		}
 	},
+
 
 	readLine(lineNumber, path, customVariable) {
 		let self = this;
